@@ -379,9 +379,13 @@ foreach my $record ( @{$records} ) {
 
 # Finally, if the new_record was in fact totally new, add it here
 unless ( $found_old ) {
-  printf("Adding DNS '%s' record '%s' -> '%s'\n", $new_record{'type'}, $new_record{'name'}, $new_record{'content'}) unless $config->quiet;
-  push @{$data{'body'}{'dns_records'}} , \%new_record;
-  $dns_changed = 1;
+  if ( $config->delete ) {
+    printf("Record to Delete does't exists DNS '%s' record '%s'\n", $new_record{'type'}, $new_record{'name'}) unless $config->quiet;
+  } else {
+    printf("Adding DNS '%s' record '%s' -> '%s'\n", $new_record{'type'}, $new_record{'name'}, $new_record{'content'}) unless $config->quiet;
+    push @{$data{'body'}{'dns_records'}} , \%new_record;
+    $dns_changed = 1;
+  }
 }
 
 if ( $dump_loaded ) {
