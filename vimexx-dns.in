@@ -33,6 +33,7 @@ my $config = AppConfig::Std->new( { ERROR => sub { printf STDERR "Ignoring inval
 
 # These are all the options that can be set in a config file or as an argument
 $config->define("record_ttl|t=s",   { DEFAULT => '24h', VALIDATE => '^(24h|8h|4h|2h|1h|10m|5m)$' });
+$config->define("add|a!",           { DEFAULT => 0 });
 $config->define("delete|d!",        { DEFAULT => 0 });
 $config->define("dryrun!",          { DEFAULT => 0 });
 $config->define("clear|c!",         { DEFAULT => 0 });
@@ -75,6 +76,8 @@ vimexx-dns [OPTION]... DOMAIN [CONTENT]
   -n,-nons           Do NOT use an authorative nameserver to find the actual TTL
                      of a DNS record. When this is set, all records will be set to
                      the TTL specified with -t.
+
+  -a,-add            Forces an ADD dns record in stead of Update when records already exists
 
   -d,-delete         Deletes the most recently added record, but only if
                      it was added in the last 600 seconds.
@@ -355,6 +358,13 @@ foreach my $record ( @{$records} ) {
       # Nothing actually changed, just keep this record
       printf("Unchanged DNS '%s' record '%s' -> '%s'\n", $record->{'type'}, $record->{'name'}, $new_record{'content'}) if $config->verbose;
       push @{$data{'body'}{'dns_records'}} , $record;
+
+    } elsif ( $config->add ) {
+
+      # Force ADD even when record exists
+      printf("Keep DNS '%s' record '%s' -> '%s'\n", $record->{'type'}, $record->{'name'}, $record->{'content'}) unless $config->quiet;
+      push @{$data{'body'}{'dns_records'}} , $record;
+      $found_old = 0;
 
     } else {
 
