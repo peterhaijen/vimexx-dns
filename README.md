@@ -188,6 +188,7 @@ This is an example Docker Compose configuration file:
 ```
 services:
   vimexx-ddns-client:
+    tty: true
     container_name: vimexx-ddns-client
     image: 2kman/vimexx-ddns-client:alpine
     restart: unless-stopped
