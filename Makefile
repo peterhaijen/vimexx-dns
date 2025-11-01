@@ -65,7 +65,7 @@ vimexx-dns: vimexx-dns.in Makefile
 .PHONY: build
 build: script $(IMAGES:%=build-%)
 
-build-%:
+build-%: script
 	$(DOCKER) build -f $(DOCKER_DIR)/Dockerfile.$* \
 		-t $(IMAGE_PREFIX):$* \
 		-t $(IMAGE_PREFIX):$*-$(DOCKER_VERSION) .
