@@ -1,12 +1,20 @@
-FROM alpine
+FROM alpine:3.22.2
+
 COPY vimexx-dns /root
 COPY docker/start.sh /root
+
 RUN set -x ; \
     apk update \
-    && apk add perl db zlib openssl \
-    && apk add build-base perl-dev perl-app-cpanminus db-dev zlib-dev openssl-dev \
-    && cpanm JSON AppConfig::Std LWP::UserAgent Net::DNS DB_File LWP::Protocol::https \
-    && rm -rf /root/.cpanm /var/cache/apk/* /usr/local/share/man/man?/* \
+    && apk add --no-cache \
+      build-base db db-dev zlib zlib-dev openssl openssl-dev \
+      perl perl-dev perl-app-cpanminus ca-certificates openssl \
+      perl-net-ssleay perl-io-socket-ssl perl-lwp-protocol-https \
+    && update-ca-certificates \
+    # install the rest from CPAN (pure-Perl or with headers you already provide)
+    && cpanm --notest --no-man-pages \
+      JSON AppConfig::Std LWP::UserAgent Net::DNS DB_File \
+    && rm -rf /root/.cpanm /var/cache/apk/* \
     && apk del build-base perl-dev perl-app-cpanminus db-dev zlib-dev openssl-dev
+
 
 ENTRYPOINT ["/root/start.sh"]
