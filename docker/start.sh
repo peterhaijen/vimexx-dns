@@ -13,7 +13,7 @@ trap cleanup TERM
 # Run the perl script every few minutes
 
 while true; do
-  /root/vimexx-dns -t 5m -ddns $VIMEXX_DNS_DOMAIN &
+  /root/vimexx-dns -verbose -t 5m -ddns $VIMEXX_DNS_DOMAIN &
   pid=$!
   wait "$pid"
 

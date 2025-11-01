@@ -5,7 +5,7 @@ DOCKER := $(shell if docker ps > /dev/null 2>&1; then echo docker; else echo sud
 DOCKER_DIR := docker
 
 # Vind alle Dockerfile.* bestanden
-DOCKERFILES := $(wildcard $(DOCKER_DIR)/Dockerfile.*)
+DOCKERFILES := $(wildcard $(DOCKER_DIR)/Dockerfile.[a-z]$)
 
 # Haal de image-namen eruit (bijv. Dockerfile.app → app)
 IMAGES := $(patsubst $(DOCKER_DIR)/Dockerfile.%,%, $(DOCKERFILES))
