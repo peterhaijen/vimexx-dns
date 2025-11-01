@@ -5,7 +5,7 @@ DOCKER := $(shell if docker ps > /dev/null 2>&1; then echo docker; else echo sud
 DOCKER_DIR := docker
 
 # Vind alle Dockerfile.* bestanden
-DOCKERFILES := $(wildcard $(DOCKER_DIR)/Dockerfile.[a-z]$)
+DOCKERFILES := $(wildcard $(DOCKER_DIR)/Dockerfile.*)
 
 # Haal de image-namen eruit (bijv. Dockerfile.app → app)
 IMAGES := $(patsubst $(DOCKER_DIR)/Dockerfile.%,%, $(DOCKERFILES))
@@ -20,7 +20,7 @@ IMAGE_PREFIX := 2kman/vimexx-ddns-client
 # Final release           1.1, 1.2, etc.
 
 # Versie
-BASE_VERSION := 1.3.0
+BASE_VERSION := 1.4.0
 
 DATE_FILE := .stamp
 
@@ -44,7 +44,7 @@ BUILD_DIR=$(PACKAGE)_$(DEB_VERSION)
 
 # --- Default target ---
 .PHONY: all
-all: build
+all: build deb
 
 # --- Generate build timestamp file ---
 .PHONY: versionstamp
