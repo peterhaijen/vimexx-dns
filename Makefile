@@ -125,7 +125,7 @@ start-%:
 		echo "❌ Error: 'conf' file not found. Cannot start container."; \
 		exit 1; \
 	fi
-	$(DOCKER) run -d --rm -v $(CURDIR)/conf:/etc/vimexx-dns.conf:ro --env-file docker/env --name $* $(IMAGE_PREFIX):$*-$(DOCKER_VERSION)
+	$(DOCKER) run -dt --rm -v $(CURDIR)/conf:/etc/vimexx-dns.conf:ro --env-file docker/env --name $* $(IMAGE_PREFIX):$*-$(DOCKER_VERSION)
 
 .PHONY: stop-%
 stop-%:
